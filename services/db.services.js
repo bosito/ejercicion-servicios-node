@@ -36,7 +36,7 @@ class AcademloDb {
         try {
             const data = await fs.readFile(this.dbPath, "utf8");
             const parseData = JSON.parse(data);
-            
+
             parseData.push(obj);
 
             await fs.writeFile(this.dbPath, JSON.stringify(parseData));
@@ -56,15 +56,15 @@ class AcademloDb {
             const arrayData = [...parseData];
             let indexUser;
 
-            arrayData.forEach((element,index) => {
-                if(element.id === id){
+            arrayData.forEach((element, index) => {
+                if (element.id === id) {
                     indexUser = index
-                }
+                };
             });
 
             if (indexUser === undefined) {
-                throw new Error("El uario no existe en la DB");
-            };
+                throw new Error("Error al actualizar el usuario");
+            }
 
             arrayData.splice(indexUser, 1, obj);
 
@@ -73,13 +73,41 @@ class AcademloDb {
             return arrayData[indexUser];
 
         } catch (error) {
+
             throw new Error("Error al actualizar el usuario");
+
         }
     }
 
     static delete = async id => {
+        try {
+            const data = await fs.readFile(this.dbPath, "utf8");
+            const parseData = JSON.parse(data);
+            const arrayData = [...parseData];
+            let indexUser;
 
-    }
+            arrayData.forEach((element, index) => {
+                if (element.id === id) {
+                    indexUser = index
+                }
+            });
+
+            if (indexUser === undefined) {
+                return false;
+            };
+
+            arrayData.splice(indexUser, 1);
+
+            await fs.writeFile(this.dbPath, JSON.stringify(arrayData));
+
+            return true
+
+        } catch (error) {
+
+            throw new Error("Error al eliminar el usuario");
+
+        }
+    };
 
     static clear = async () => {
         try {
@@ -111,7 +139,9 @@ class AcademloDb {
             return userArr;
 
         } catch (error) {
+
             throw new Error("Hubo un error al insertar en la base de datos");
+            
         }
     }
 

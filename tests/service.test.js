@@ -135,12 +135,21 @@ describe("Servicio update", () => {
         );
     });
 
-    it("Debería de arrojar un error al tratar de actualizar un usuario que no existe en la DB", () => {
+    it("Debería de arrojar un error al tratar de actualizar un usuario que no existe en la DB", async () => {
+        // const updateUser = {
+        //     id: 10,
+        //     firstname: faker.name.firstName(),
+        //     lastname: faker.name.lastName(),
+        //     email: faker.internet.email().toLowerCase()
+        // };
+
+        // const result = await  db.update(updateUser, 20)
+
+        //profe no se por que esto no funciona :C
+        //expect(result).toThrow()
 
     });
 });
-
-/*
 
 describe("Servicio delete", () => {
     let newUser = {};
@@ -162,10 +171,15 @@ describe("Servicio delete", () => {
 
     it("Debería de regresar true al eliminar un usuario", async () => {
 
+        const deleteUser = await db.delete(userCreated.id);
+
+        expect(deleteUser).toBe(true);
     });
 
     it("Debería de regresar false al tratar de eliminar un usuario con un id que no existe en la DB", async () => {
 
+        const deleteUser = await db.delete(40);
+
+        expect(deleteUser).toBe(false);
     });
 });
-*/
