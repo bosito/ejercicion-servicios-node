@@ -1,4 +1,4 @@
-import db from "../services/db.services.js";
+import db from "../../services/db.services.js";
 import faker from "faker";
 
 describe("Servicio findAll de DB", () => {
@@ -146,7 +146,7 @@ describe("Servicio update", () => {
         // const result = await  db.update(updateUser, 20)
 
         //profe no se por que esto no funciona :C
-        //expect(result).toThrow()
+        //expect(result).toThrow(Error)
 
     });
 });

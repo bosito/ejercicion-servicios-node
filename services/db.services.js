@@ -20,10 +20,9 @@ class AcademloDb {
     static findById = async (id) => {
         try {
 
-            const data = await fs.readFile(this.dbPath, "utf8");
-            const parseData = JSON.parse(data);
+            const data = await this.findAll();
 
-            return parseData.find((dataUser) => dataUser.id === parseInt(id));
+            return data.find((dataUser) => dataUser.id === parseInt(id));
 
         } catch (error) {
 
@@ -34,14 +33,18 @@ class AcademloDb {
 
     static create = async (obj) => {
         try {
-            const data = await fs.readFile(this.dbPath, "utf8");
-            const parseData = JSON.parse(data);
+            const data = await this.findAll();
 
-            parseData.push(obj);
+            const nextId = (data.length + 1);
 
-            await fs.writeFile(this.dbPath, JSON.stringify(parseData));
+            const newObj = obj;
+            newObj.id = nextId;
 
-            return obj;
+            data.push(newObj);
+
+            await fs.writeFile(this.dbPath, JSON.stringify(data));
+
+            return newObj;
 
         } catch (error) {
             throw new Error("Error al crear nuevo usuario");
@@ -51,19 +54,13 @@ class AcademloDb {
     static update = async (obj, id) => {
         try {
 
-            const data = await fs.readFile(this.dbPath, "utf8");
-            const parseData = JSON.parse(data);
-            const arrayData = [...parseData];
-            let indexUser;
+            const data = await this.findAll();
+            const arrayData = [...data];
 
-            arrayData.forEach((element, index) => {
-                if (element.id === id) {
-                    indexUser = index
-                };
-            });
+            const indexUser = arrayData.findIndex(item => item.id === id)
 
-            if (indexUser === undefined) {
-                throw new Error("Error al actualizar el usuario");
+            if (indexUser === -1) {
+                throw new Error("No existe ie id en DB");
             }
 
             arrayData.splice(indexUser, 1, obj);
@@ -81,9 +78,8 @@ class AcademloDb {
 
     static delete = async id => {
         try {
-            const data = await fs.readFile(this.dbPath, "utf8");
-            const parseData = JSON.parse(data);
-            const arrayData = [...parseData];
+            const data = await this.findAll();
+            const arrayData = [...data];
             let indexUser;
 
             arrayData.forEach((element, index) => {
@@ -141,7 +137,7 @@ class AcademloDb {
         } catch (error) {
 
             throw new Error("Hubo un error al insertar en la base de datos");
-            
+
         }
     }
 
