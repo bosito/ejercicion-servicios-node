@@ -19,7 +19,24 @@ export const getUserById = async(request, response, next) => {
         response.json(user);
 
     } catch (error) {
-        next(error)
-    }
-}
+
+        next(error);
+
+    };
+};
+
+export const createUser = async(request, response, next) => {
+    try {
+        const { firstname, lastname, email } = request.body;
+
+        const user = await db.create({ firstname, lastname, email});
+
+        response.status(201).json(user);
+
+    } catch (error) {
+
+        next(error);
+
+    };
+};
 
